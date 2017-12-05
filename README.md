@@ -17,4 +17,3 @@ a neural-network test program that demonstrates the behavior of your neural-net 
 * Demonstrates examples of the behavior of grandmother cells
 * Demonstrates Instar Activity behavior, including both activation decay and influence of interneurone inputs
 * Demonstrates Instar Learning behavior, including both forgetting and Hebbian learning
-# jarvis
