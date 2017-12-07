@@ -10,15 +10,7 @@ File Description:
 
 
 class Neurode:
-    def __init__(self):
+    def __init__(self, time):
         self.activated = False
-        self.a_level = 0
+        self.a_ = 0
         self.threshold = 0.2
-
-
-def bullshit():
-    print("bullshit")
-
-
-if __name__ == "__main__":
-    bullshit()
