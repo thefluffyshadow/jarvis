@@ -9,7 +9,7 @@ File Description:
 """
 
 
-class Neuron:
+class Neurode:
     def __init__(self):
         self.activated = False
         self.a_level = 0
