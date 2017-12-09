@@ -11,7 +11,7 @@ File Description:
 
 from numpy import exp, array, random, dot
 
-training_set_inputs = array([[0, 0, 1], [1, 1, 1], [1, 0, 1], [0, 1, 1]])
+training_set_inputs = array([[0, 0, 1], [1, 1, 1], [1, 0, 1], [0, 1, 1], []])
 training_set_outputs = array([[0, 1, 1, 0]]).T
 random.seed(1)
 synaptic_weights = 2 * random.random((3, 1)) - 1
