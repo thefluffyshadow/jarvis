@@ -17,40 +17,17 @@ from random import random
 
 
 class Neurode:
-    def __init__(self, id, pattern=None):
-        self.id = id
+    def __init__(self, ident, pattern=None):
+        self.id_num = ident
         self.active = False  # if the neuron is in an active state
         self.act_lvl = 0  # technical activity level
-        self.threshold = 0.2  # mysterious threshold???
+        self.threshold = 0.2
         # Grandmother" pattern that the neurode will recognize if it ever sees.
         self.grandmother = pattern
 
     def introduce_grandmother(self, pattern):
         self.grandmother = pattern
-
-    def activate(self, id, activations, weights, pattern):
-        """
-        Adjusts activation level and active status.
-        Does not return anything, operates completely in-neuron.
-        :param activations: list of boolean values corresponding to the activation status of all other main neurons.
-        :param pattern: pattern that the neuron receives
-        :return:
-        """
-        # Should check to see if the stimulus is there to see if the activation level should be increased.
-        # Test to see if the neuron recognizes its own grandmother.
-        if pattern == self.grandmother:
-            self.act_lvl = 1
-        # If not, should decay the activation level according to the last time the stimulus was there.
-        else:
-            # Now, the neurode should increase its activation level according to interneurode inputs.
-            # Sum up the activations, but only if they are marked as "active" in the list of activations.
-            w_sum = sum([weights[id][i] if activations[i] else 0 for i in range(len(activations))]) + self.act_lvl
-
-            # Regularize the activation level with the sigmoid function and set the neurode to that activation level.
-            self.act_lvl = expit(w_sum)
-
-        return self.act_lvl >= self.threshold
-
+        
 
 class NeuralNet:
     def __init__(self, size, training_data):
@@ -73,21 +50,43 @@ class NeuralNet:
         self.train(training_data)
 
     def train(self, pattern):
-        # First, assign a grandson to the pattern - the first neurode found that does not have a grandmother.
-        for neurode in self.hidden_net:
-            if neurode.grandmother is None:
-                neurode.introduce_grandmother(pattern)
-                break
+        time_delta = 0
+        rhythm = range(10000)
+        
+        for beat in rhythm:
+            # First, assign a grandson to the pattern - the first neurode found that does not have a grandmother.
+            for neurode in self.hidden_net:
+                if neurode.grandmother is None:
+                    neurode.introduce_grandmother(pattern)
+                    break
 
-        # Then, run the pattern through and adjust the weights according to the error.
+            for neurode in self.hidden_net:
+                # Should check to see if the stimulus is there to see if the activation level should be increased.
+                # Test to see if the neuron recognizes its own grandmother.
+                if pattern == neurode.grandmother:
+                    neurode.act_lvl = 1
+                    time_delta = beat
+                        
+                # If not, should decay the activation level according to the last time the stimulus was there.
+                else:
+                    # Create the list of activations - just a list of boolean values corresponding to the neurodes that
+                    # are active in this iteration.
+                    activations = [n.active for n in self.hidden_net]
+
+                    # Now, the neurode should increase its activation level according to interneurode inputs.
+                    # Sum up the activations, but only if they are marked as "active" in the list of activations.
+                    w_sum = sum([self.weights[neurode.id_num][i] if activations[i] else 0
+                                 for i in range(len(activations))]) + neurode.act_lvl
+
+                    # Decay the activation level according to the time delta since stimulus last occurred.
+                    w_sum -= (0 - time_delta) * w_sum
+    
+                    # Regularize the activation level with the sigmoid function.
+                    neurode.act_lvl = expit(w_sum)
 
     def output(self):
         pass
 
 
-def build_neural_net():
-    print("bullshit")
-
-
 if __name__ == "__main__":
-    build_neural_net()
+    Brain = NeuralNet(8, dataset)  # Creates and trains the neural network based on some training data.
