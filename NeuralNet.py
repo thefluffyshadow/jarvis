@@ -30,10 +30,10 @@ class Neurode:
         
 
 class NeuralNet:
-    def __init__(self, size, training_data):
+    def __init__(self, size, data):
         """
         :param size: Number of neurodes in the main "net".
-        :param training_data: List of data points in whatever form they may take
+        :param data: List of data points in whatever form they may take
         """
         self.size = size
         self.hidden_net = [Neurode(i) for i in range(size)]
@@ -47,7 +47,7 @@ class NeuralNet:
         # is "offensive" or "not offensive" or something like an image is "red", "green", "blue", etc.
         self.classes = []
 
-        self.train(training_data)
+        self.train(data)
 
     def train(self, pattern):
         time_delta = 0
@@ -84,9 +84,30 @@ class NeuralNet:
                     # Regularize the activation level with the sigmoid function.
                     neurode.act_lvl = expit(w_sum)
 
-    def output(self):
+    def classify(self, input):
+        """
+        Takes in the thing to be classified by the neural net and classifies it according to the weights established
+        from training.
+        :return:
+        """
         pass
+
+    def process(self, input):
+        """
+        Intermediate function that enables the neural net to distinguish between and therefore accept either a single
+        item to classify or a list of items to classify.
+        :param input:
+        :return:
+        """
+        if type(input) == type([]):
+            return [self.classify(item) for item in input]
+        else:
+            return self.process(input)
 
 
 if __name__ == "__main__":
-    Brain = NeuralNet(8, dataset)  # Creates and trains the neural network based on some training data.
+    training_data = []
+    some_new_data = []
+
+    Brain = NeuralNet(8, training_data)  # Creates and trains the neural network based on some training data.
+    Brain.process(some_new_data)
